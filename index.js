@@ -80,6 +80,29 @@ app.get('/event/:eventId', async(req,res)=>{
     }
 })
 
+const readByName = async(eventName)=>{
+    try{
+        const event = await Event.findOne({eventName:eventName})
+        console.log(event)
+        return event
+    }catch(error){
+        console.log("Error while search by name",error)
+    }
+}
+
+app.get('/eventName/:eventName',async(req,res)=>{
+    try{
+        const event = await readByName(req.params.eventName)
+        if(event){
+            res.status(200).json(event)
+        }else{
+            res.status(400).json({message:"No Data Found"})
+        }
+    }catch{
+        res.status(500).json({error:"Error while reading events"})
+    }
+})
+
 const PORT = 3000
 
 app.listen(PORT,()=>{
